@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "blocky.fullname" . }}
+  labels:
+    {{- include "blocky.labels" . | nindent 4 }}
+    checksum/config: {{ .Values.config | toYaml | sha1sum }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "blocky.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "blocky.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "blocky.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: dns-tcp
+              containerPort: {{ .Values.config.ports.dns }}
+              protocol: TCP
+            - name: dns-udp
+              containerPort: {{ .Values.config.ports.dns }}
+              protocol: UDP
+            {{- with .Values.config.ports.tls }}
+            - name: dns-tls
+              containerPort: {{ . }}
+              protocol: TCP
+            {{- end }}
+            {{- with .Values.config.ports.http }}
+            - name: http
+              containerPort: {{ . }}
+              protocol: TCP
+            {{- end }}
+            {{- with .Values.config.ports.https }}
+            - name: https
+              containerPort: {{ . }}
+              protocol: TCP
+            {{- end }}
+          {{- with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config.yml
+              subPath: config.yml
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- if .Values.ui.enabled }}
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default "latest" }}"
+          ports:
+            - name: ui-http
+              containerPort: 8002
+              protocol: TCP
+        {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "blocky.fullname" $ }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
