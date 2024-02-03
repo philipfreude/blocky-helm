@@ -89,6 +89,12 @@ spec:
             - name: ui-http
               containerPort: 8002
               protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.ui.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.ui.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.ui.resources | nindent 12 }}
         {{- end }}
       {{- with .Values.volumes }}
       volumes:
