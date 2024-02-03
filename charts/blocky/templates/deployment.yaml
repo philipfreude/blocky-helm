@@ -4,7 +4,6 @@ metadata:
   name: {{ include "blocky.fullname" . }}
   labels:
     {{- include "blocky.labels" . | nindent 4 }}
-    checksum/config: {{ .Values.config | toYaml | sha1sum }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -19,6 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        checksum/config: {{ .Values.config | toYaml | sha1sum }}
         {{- include "blocky.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
