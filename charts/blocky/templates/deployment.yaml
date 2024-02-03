@@ -31,6 +31,12 @@ spec:
       serviceAccountName: {{ include "blocky.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.redis.enabled }}
+      initContainers:
+        - name: wait-for-redis
+          image: busybox
+          command: [ "sh", "-c", "until nc -z {{ .Values.config.redis.address | replace ":" " " }} > /dev/null; do echo Waiting for redis...; sleep 2; done;" ]
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
