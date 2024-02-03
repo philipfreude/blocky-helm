@@ -62,9 +62,9 @@ config:
       default:
         - 1.1.1.1
         - 8.8.8.8
-  redis:
-    address: blocky-redis-master:6379
-    required: true
+  # redis:
+  #   address: blocky-redis-master:6379
+  #   required: true
 
 resources: { }
   # We usually recommend not to specify default resources and to leave this as a conscious
