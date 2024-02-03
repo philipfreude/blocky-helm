@@ -44,6 +44,7 @@ service:
   enabled: true
   type: ClusterIP
   # type: LoadBalancer
+  externalTrafficPolicy: Cluster
 
 env:
   # Optional to synchronize the log timestamp with host

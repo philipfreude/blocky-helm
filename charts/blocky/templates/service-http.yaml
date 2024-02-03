@@ -7,6 +7,9 @@ metadata:
     {{- include "blocky.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     {{- with .Values.config.ports.http }}
     - port: {{ . }}
