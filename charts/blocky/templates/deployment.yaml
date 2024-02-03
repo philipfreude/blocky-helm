@@ -83,7 +83,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- if .Values.ui.enabled }}
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-frontend
           image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default "latest" }}"
           ports:
             - name: ui-http
