@@ -9,7 +9,7 @@ keywords:
   - blocky
 maintainers:
   - name: Philip Freude (@philipfreude)
-version: 0.1.0
+version: 0.1.1
 appVersion: v0.23
 
 dependencies:
