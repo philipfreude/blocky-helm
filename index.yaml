@@ -3,6 +3,28 @@ entries:
   blocky:
   - apiVersion: v2
     appVersion: v0.23
+    created: "2024-02-03T13:25:24.480750119Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 18.12.0
+    description: Blocky is a DNS proxy and ad-blocker
+    digest: 41ce3cf187778f54b7f273cc088c4218160785dadee123378a35635b294dea1f
+    home: https://github.com/philipfreude/blocky-helm
+    keywords:
+    - ad-blocker
+    - dns
+    - blocky
+    maintainers:
+    - name: Philip Freude (@philipfreude)
+    name: blocky
+    type: application
+    urls:
+    - https://github.com/philipfreude/blocky-helm/releases/download/blocky-0.2.2/blocky-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: v0.23
     created: "2024-02-03T13:06:48.88513911Z"
     dependencies:
     - condition: redis.enabled
@@ -45,4 +67,4 @@ entries:
     urls:
     - https://github.com/philipfreude/blocky-helm/releases/download/blocky-0.2.0/blocky-0.2.0.tgz
     version: 0.2.0
-generated: "2024-02-03T13:06:48.885162253Z"
+generated: "2024-02-03T13:25:24.480759887Z"
