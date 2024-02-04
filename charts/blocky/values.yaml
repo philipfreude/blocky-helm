@@ -66,6 +66,8 @@ config:
   # redis:
   #   address: blocky-redis-master:6379
   #   required: true
+  prometheus:
+    enable: false
 
 resources: { }
   # We usually recommend not to specify default resources and to leave this as a conscious
