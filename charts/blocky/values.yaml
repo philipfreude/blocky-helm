@@ -116,6 +116,7 @@ volumeMounts:
   # Optional to synchronize the log timestamp with host
   - name: tz-config
     mountPath: /etc/localtime
+    readOnly: true
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
